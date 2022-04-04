@@ -45,7 +45,9 @@ function App() {
 
           <div className="shadow-sm p-3 bg-body rounded mt-3 border d-flex">
             <div className="w-100">
-              <p>I have to do my homework</p>
+              <p className="text-decoration-line-through todo__text">
+                I have to do my homework
+              </p>
               <button className="btn btn-sm btn-outline-primary">Edit</button>
               <button className="btn btn-sm btn-outline-danger  m-1">
                 Delete
