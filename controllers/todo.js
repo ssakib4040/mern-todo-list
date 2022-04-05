@@ -1,7 +1,7 @@
 const Todo = require("../models/Todo");
 
 exports.getAllTodos = async (req, res) => {
-  const todos = await Todo.find({});
+  const todos = await Todo.find({}).sort({ createdAt: "desc" });
 
   try {
     res.status(200).json({
@@ -30,11 +30,12 @@ exports.createTodo = async (req, res) => {
     completed: false,
   };
 
-  await Todo.create(todo);
+  const data = await Todo.create(todo);
 
   res.status(201).json({
     success: true,
     message: "Created Successfully",
+    data: data,
   });
 };
 
@@ -75,22 +76,26 @@ exports.getTodoById = async (req, res) => {
 };
 
 exports.editTodoById = async (req, res) => {
-  const { name, active, completed } = req.body;
+  const { name, completed } = req.body;
   const { id: todoId } = req.params;
 
-  console.log(name, active, completed);
-
   try {
-    await Todo.findByIdAndUpdate(todoId, {
+    const editData = await Todo.findByIdAndUpdate(todoId, {
       name: name,
-      active: active ? active : false,
       completed: completed ? completed : false,
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Edited successfully",
-    });
+    if (!editData) {
+      res.status(400).json({
+        success: false,
+        message: "Todo not found",
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Edited successfully",
+      });
+    }
   } catch (error) {
     res.status(400).json({
       success: false,
