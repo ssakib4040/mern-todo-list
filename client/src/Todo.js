@@ -28,6 +28,7 @@ function Todo(props) {
             className={`${
               props.completed && "text-decoration-line-through"
             } todo__text`}
+            onClick={() => props.toggleCompleted(props.id)}
           >
             {props.name}
           </p>
@@ -45,7 +46,12 @@ function Todo(props) {
           </button>
         </div>
         <div className="mx-2">
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            // checked={`${props.completed === true ? true : false}`}
+            checked={props.completed == true ? true : false}
+            onChange={() => props.toggleCompleted(props.id)}
+          />
         </div>
       </div>
 

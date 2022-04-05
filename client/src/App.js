@@ -81,6 +81,30 @@ function App() {
     setTodosFilterList(data);
   };
 
+  const toggleCompleted = async (id) => {
+    const toggledTodo = todos.slice().find((x) => x._id == id);
+    // console.log(toggledTodo.completed);
+    try {
+      axios.put(`/api/todos/edit/${id}`, {
+        completed: !toggledTodo.completed,
+      });
+
+      const newTodo = todos.slice();
+
+      newTodo.map((todo, index) => {
+        if (todo._id == id) {
+          newTodo[index] = { ...todo, completed: !newTodo[index].completed };
+        }
+        return todo;
+      });
+
+      setTodos(newTodo);
+      setTodosFilterList(newTodo);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -145,6 +169,7 @@ function App() {
                 name={todo.name}
                 completed={todo.completed}
                 deleteTodo={deleteTodo}
+                toggleCompleted={toggleCompleted}
                 // deleteClick={handleDelete}
               />
             ))
